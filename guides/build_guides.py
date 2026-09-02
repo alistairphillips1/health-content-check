@@ -71,12 +71,12 @@ def step(n, text, note=None):
     return t
 
 
-def box(heading, lines, bg=BOXBG):
+def box(heading, lines, bg=BOXBG, w=160):
     inner = [Paragraph(heading, S["boxh"])]
     for ln in lines:
         inner.append(Paragraph(ln, S["boxb"]))
         inner.append(Spacer(1, 2))
-    t = Table([[inner]], colWidths=[160 * mm])
+    t = Table([[inner]], colWidths=[w * mm])
     t.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), bg),
         ("BOX", (0, 0), (-1, -1), 0.6, RULE),
@@ -105,25 +105,28 @@ def trouble(rows):
     return t
 
 
-def build(path, tool, story_fn):
+def build(path, tool, story_fn, compact=False):
+    m = 15 if compact else 25
+    top = 13 if compact else 20
+    bot = 14 if compact else 20
     doc = BaseDocTemplate(path, pagesize=A4,
-                          leftMargin=25 * mm, rightMargin=25 * mm,
-                          topMargin=20 * mm, bottomMargin=20 * mm,
+                          leftMargin=m * mm, rightMargin=m * mm,
+                          topMargin=top * mm, bottomMargin=bot * mm,
                           title=f"Health Content Check, install guide for {tool}",
                           author="Health Content Check")
-    frame = Frame(doc.leftMargin, doc.bottomMargin, 160 * mm,
-                  A4[1] - 40 * mm, id="f", showBoundary=0)
+    frame = Frame(doc.leftMargin, doc.bottomMargin, (210 - 2 * m) * mm,
+                  A4[1] - (top + bot) * mm, id="f", showBoundary=0)
 
     def furniture(canvas, d):
         canvas.saveState()
         canvas.setFont("Helvetica", 8)
         canvas.setFillColor(MUTED)
-        canvas.drawString(25 * mm, 12 * mm,
+        canvas.drawString(m * mm, (bot - 8) * mm,
                           f"Health Content Check, {tool} guide. {VERSION}, {DATE}.")
-        canvas.drawRightString(A4[0] - 25 * mm, 12 * mm, f"Page {canvas.getPageNumber()}")
+        canvas.drawRightString(A4[0] - m * mm, (bot - 8) * mm, f"Page {canvas.getPageNumber()}")
         canvas.setStrokeColor(RULE)
         canvas.setLineWidth(0.5)
-        canvas.line(25 * mm, 16 * mm, A4[0] - 25 * mm, 16 * mm)
+        canvas.line(m * mm, (bot - 4) * mm, A4[0] - m * mm, (bot - 4) * mm)
         canvas.restoreState()
 
     doc.addPageTemplates([PageTemplate(id="main", frames=[frame], onPage=furniture)])
@@ -235,6 +238,14 @@ def chatgpt_story():
         "If your account does have Skills, there is a shorter route on the last page.",
     ]))
 
+    s.append(box("One real limitation, worth knowing before you start", [
+        "ChatGPT's Python sandbox has no internet access, so the bundled "
+        "reference-checking script cannot run there. Claude can verify that a citation "
+        "is real. ChatGPT has to search for it instead, which is weaker.",
+        "If your pages cite references, check them yourself: search each DOI or PMID and "
+        "confirm the title, authors and year match what the page claims.",
+    ], bg=WARNBG))
+
     s.append(box("Before you start, you need three things", [
         "1. A ChatGPT account, at chatgpt.com.",
         "2. The file <b>health-content-check.zip</b>, saved to your computer. "
@@ -320,7 +331,184 @@ def chatgpt_story():
     return s
 
 
+# ---------------------------------------------------------------- Gemini
+
+def gemini_story():
+    s = []
+    s.append(Paragraph("Health Content Check", S["title"]))
+    s.append(Paragraph("How to set it up in Gemini. Step by step, about 5 minutes. "
+                       "You do not need any technical knowledge.", S["sub"]))
+    s.append(Spacer(1, 12))
+
+    s.append(box("Before you start, you need three things", [
+        "1. A Google account. Gems are free on every Gemini plan, including the free tier.",
+        "2. The file <b>health-content-check.zip</b>, saved to your computer. "
+        "For this route you <b>do</b> need to unzip it.",
+        "3. A computer. Gems can only be built in the Gemini web app, not the mobile app. "
+        "Once built, the Gem appears on your phone automatically.",
+    ]))
+
+    s.append(box("One real limitation, worth knowing before you start", [
+        "The bundled reference-checking script does not run in Gemini. Claude can verify "
+        "that a citation is real. Gemini has to search for it instead, which is weaker.",
+        "If your pages cite references, check them yourself: search each DOI or PMID and "
+        "confirm the title, authors and year match what the page claims.",
+    ], bg=WARNBG))
+
+    s.append(Paragraph("Part 1. Unzip the folder", S["h2"]))
+    s.append(step(1, "Find <b>health-content-check.zip</b> in your Downloads folder."))
+    s.append(step(2, "Unzip it.",
+                  "Windows: right click, then Extract All. Mac: double click it."))
+    s.append(step(3, "You now have a folder holding <b>SKILL.md</b> and a <b>references</b> "
+                     "folder. Leave the window open, you need it shortly."))
+
+    s.append(Paragraph("Part 2. Build the Gem", S["h2"]))
+    s.append(step(4, "Go to <b>gemini.google.com</b> and sign in."))
+    s.append(step(5, "In the sidebar on the left, click <b>Gems</b>, then <b>New Gem</b>.",
+                  "It may say Explore Gems first. Open that, then New Gem."))
+    s.append(step(6, "Name it <b>Health Content Check</b>."))
+    s.append(step(7, "Open <b>SKILL.md</b> from the unzipped folder in any text editor.",
+                  "Windows: right click, Open with, Notepad. Mac: right click, Open With, "
+                  "TextEdit. It is a plain text file, nothing will break."))
+    s.append(step(8, "Select all of it, copy it and paste it into the "
+                     "<b>Instructions</b> box.",
+                  "Do not click the magic wand to rewrite the instructions. It will "
+                  "shorten them and drop the rules that matter."))
+    s.append(step(9, "Under <b>Knowledge</b>, click <b>Add files</b>, then "
+                     "<b>Upload files</b>. Add the three files from the "
+                     "<b>references</b> folder.",
+                  "criteria-gate.md, improvement-playbook.md and production-process.md. "
+                  "If it refuses a .md file, rename it to end in .txt and try again."))
+    s.append(step(10, "Click <b>Save</b>.",
+                   "Previewing on the right does not save it. You have to click Save."))
+
+    s.append(Paragraph("Part 3. Use it", S["h2"]))
+    s.append(step(11, "Open the Gem from the sidebar. Every chat you start from there "
+                      "carries the instructions."))
+    s.append(step(12, "Paste your page, or attach it, then type:",
+                   "<b>Check this patient information page. Follow your instructions "
+                   "and use the knowledge files.</b>"))
+    s.append(step(13, "Read what comes back, and fix the Required items first."))
+
+    s.append(Paragraph("If something goes wrong", S["h2"]))
+    s.append(trouble([
+        ("The Gem ignores the knowledge files",
+         "Say so directly: <b>Use the criteria gate file and the improvement playbook.</b> "
+         "Knowledge files are consulted less reliably than instructions."),
+        ("It will not accept the .md files",
+         "Rename them so they end in .txt and upload again. The contents are identical."),
+        ("Your changes vanished",
+         "You previewed without saving. Open the Gem, make the change again, click Save."),
+        ("It invents a number or a reference",
+         "Say: <b>Remove every figure that has no source. Do not replace it with an "
+         "estimate.</b> This is the one failure that matters, so check numbers yourself."),
+    ]))
+
+    s.append(Spacer(1, 12))
+    s.append(box("One thing to be clear about", [
+        "This is a <b>self-check</b>. It does not certify anything, and it gives you no "
+        "badge, tick or logo to put on your website.",
+        "Quality marks are awarded by schemes that assess how you produce content over "
+        "time, not by anything that looks at a single page. If you want one, apply to "
+        "the scheme.",
+        "What you can honestly say is that your content is written to the NHS standard "
+        "for creating health content. That is true and it is worth saying.",
+        f"Menus change. If what you see does not match this guide, the current version "
+        f"is at {LINK}",
+    ], bg=WARNBG))
+    return s
+
+
+# ---------------------------------------------------------------- One page
+
+TICKS = ParagraphStyle("ticks", fontName="Helvetica", fontSize=8.6, leading=12.6,
+                       textColor=INK, spaceAfter=0, leftIndent=14, firstLineIndent=-14)
+H3 = ParagraphStyle("h3", fontName="Helvetica-Bold", fontSize=10.5, leading=13,
+                    textColor=ACCENT, spaceBefore=7, spaceAfter=3)
+SMALL = ParagraphStyle("small", fontName="Helvetica", fontSize=8.6, leading=12.2,
+                       textColor=INK, spaceAfter=4)
+TINY = ParagraphStyle("tiny", fontName="Helvetica", fontSize=7.4, leading=10,
+                      textColor=MUTED)
+
+
+def ticklist(items):
+    out = []
+    for i in items:
+        out.append(Paragraph(f"[&nbsp;&nbsp;]&nbsp;&nbsp;{i}", TICKS))
+    return out
+
+
+def onepager_story():
+    W = 180
+    s = []
+    s.append(Paragraph("Health Content Check", ParagraphStyle(
+        "t1", fontName="Helvetica-Bold", fontSize=18, leading=21, textColor=INK)))
+    s.append(Paragraph("The one-page version. For anyone writing health information for "
+                       "patients or the public. No AI needed. Print it, pin it.",
+                       ParagraphStyle("s1", fontName="Helvetica", fontSize=9,
+                                      leading=12, textColor=MUTED, spaceAfter=7)))
+
+    s.append(box("First, the one that decides everything", [
+        "<b>Is this page information, or is it marketing?</b> If its job is to persuade "
+        "someone to book, buy or choose a provider, it is marketing. It cannot be assessed as "
+        "patient information, and dressing it up as information is the most damaging pattern on "
+        "healthcare websites. Plain language and a tidy reference list make a sales page more "
+        "persuasive, not more trustworthy.",
+        "Signals: superlatives about the provider, booking as the main call to action, outcomes "
+        "with no source or no denominator, testimonials doing the work evidence should do. "
+        "Split the selling onto its own page.",
+    ], w=W))
+
+    s.append(Paragraph("Check these on the page itself", H3))
+    s += ticklist([
+        "<b>One clear job.</b> You can say in a sentence who it is for and what decision it helps them make.",
+        "<b>It answers the awkward questions.</b> Does it hurt. How long off work. What if I do nothing. What does it cost.",
+        "<b>Every number has a source, a denominator and a date.</b> If you cannot source it, remove it.",
+        "<b>Frequencies, not percentages.</b> \u201cAbout 1 in 200 people\u201d beats \u201c0.5%\u201d. Same denominator throughout.",
+        "<b>Risks as well as benefits</b>, including rare things that are serious.",
+        "<b>Doing nothing is covered</b>, honestly, alongside the conservative options.",
+        "<b>Uncertainty is stated.</b> \u201cWe do not know\u201d is a legitimate sentence and a trust signal.",
+        "<b>Short sentences and short paragraphs.</b> About 20 words. About 3 sentences.",
+        "<b>Every technical term is explained or replaced</b>, on first use.",
+        "<b>Named author with their role</b>, the organisation, the date written, the review date and any commercial interest, all visible to the reader.",
+        "<b>A route to a real person</b>, what to do urgently if things go wrong, plus links out to the national source even when it is not yours.",
+        "<b>Alt text on images</b>, captions on video, links that say where they go.",
+    ])
+
+    s.append(Paragraph("Only you can confirm these. Do not tick them lightly.", H3))
+    s += ticklist([
+        "A qualified clinician has checked the clinical content. If that is you, someone else still reads it.",
+        "A lay reader who does not work in healthcare has read it and understood it.",
+        "Patients or members of the public were involved, or at least asked.",
+        "There is a way for readers to say it is wrong or unclear, and someone reads it.",
+        "The review date is diarised, owned by a named person and honoured.",
+        "Someone knows whether it is read, and whether it helped.",
+    ])
+    s.append(Spacer(1, 2))
+    s.append(Paragraph("Asking two patients what they did not understand finds more than any "
+                       "automated score.", TINY))
+
+    s.append(Paragraph("When it is all wrong, fix in this order", H3))
+    s.append(Paragraph("1. Anything that could lead a reader to a harmful decision: a wrong number, "
+                       "an overclaim, a missing serious risk, no route to urgent help. &nbsp; "
+                       "2. Marketing dressed as information. &nbsp; 3. Missing author, date or review "
+                       "date. &nbsp; 4. Readability. &nbsp; 5. Everything else.", SMALL))
+
+    s.append(Spacer(1, 4))
+    s.append(box("What this is not", [
+        "Not certification. No badge, tick or logo, and not run or endorsed by NHS England or by the "
+        "Patient Information Forum. Quality marks are awarded by schemes that assess how you produce "
+        "content over time, not by anything that inspects a single page. What you can honestly say: "
+        "<i>written to the NHS standard for creating health content</i>.",
+        f"Built on the NHS digital service manual standard and the 10 published PIF TICK criteria. "
+        f"Free to use and adapt: {LINK}",
+    ], bg=WARNBG, w=W))
+    return s
+
+
 if __name__ == "__main__":
     build("Install-in-Claude.pdf", "Claude", claude_story)
     build("Install-in-ChatGPT.pdf", "ChatGPT", chatgpt_story)
-    print("built Install-in-Claude.pdf and Install-in-ChatGPT.pdf")
+    build("Install-in-Gemini.pdf", "Gemini", gemini_story)
+    build("Health-Content-Check-One-Page.pdf", "one page", onepager_story, compact=True)
+    print("built 4 PDFs: Claude, ChatGPT, Gemini, one-page checklist")

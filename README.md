@@ -14,12 +14,28 @@ It runs inside Claude or ChatGPT. You do not need to be technical to use it.
 
 | I use | Download this | Then follow |
 |---|---|---|
-| **Claude** | [health-content-check.zip](dist/health-content-check.zip) | [Install in Claude (PDF)](guides/Install-in-Claude.pdf) |
-| **ChatGPT** | [health-content-check.zip](dist/health-content-check.zip) | [Install in ChatGPT (PDF)](guides/Install-in-ChatGPT.pdf) |
+| **Claude** | [health-content-check.zip](https://github.com/alistairphillips1/health-content-check/releases/latest/download/health-content-check.zip) | [Install in Claude (PDF)](guides/Install-in-Claude.pdf) |
+| **ChatGPT** | [health-content-check.zip](https://github.com/alistairphillips1/health-content-check/releases/latest/download/health-content-check.zip) | [Install in ChatGPT (PDF)](guides/Install-in-ChatGPT.pdf) |
+| **Gemini** | [health-content-check.zip](https://github.com/alistairphillips1/health-content-check/releases/latest/download/health-content-check.zip) | [Install in Gemini (PDF)](guides/Install-in-Gemini.pdf) |
 
-On this page, click the file, then click the download button on the page that opens.
+The zip downloads straight away. The guides open in your browser, with a download button at the top right of each.
 
-A note on ChatGPT: OpenAI's Skills feature is limited to some business plans and its availability keeps changing, so the ChatGPT guide uses a Project instead. Projects work on every plan and do the same job here.
+A note on ChatGPT: OpenAI's Skills feature is limited to some business plans and its availability keeps changing, so the ChatGPT guide uses a Project instead. Projects work on every plan and do the same job here. Gemini uses a Gem, which is free on every plan.
+
+**One thing is genuinely weaker outside Claude.** ChatGPT's Python sandbox has no internet access and Gemini has no sandbox, so `verify_refs.py` cannot run in either. Claude can confirm a citation is real. Elsewhere the assistant has to search for it, which is less reliable. If your pages cite references, check them yourself.
+
+---
+
+## No AI, or nothing to install
+
+Two versions that need no account, no setup and no software.
+
+| | |
+|---|---|
+| **[The one-page checklist (PDF)](guides/Health-Content-Check-One-Page.pdf)** | Print it, pin it, work through it by hand. Nothing to install and nothing to go stale. Also readable [here](checklist/one-page-checklist.md). |
+| **[The paste-anywhere prompt](checklist/prompt.md)** | About 400 words. Paste it into any chatbot, paste your page under it. Works in Claude, ChatGPT, Gemini, Copilot or anything else. |
+
+The one-page checklist is the version most likely to still be correct in two years, because it describes no menus.
 
 ---
 
@@ -65,9 +81,13 @@ skill/health-content-check/     the skill itself
   scripts/
     verify_refs.py              resolves DOIs and PMIDs, catches invented citations
 
-guides/                         the two install guides, and the script that builds them
+checklist/
+  one-page-checklist.md         the no-AI checklist, readable on the web
+  prompt.md                     the paste-anywhere prompt
+
+guides/                         four PDFs, and the script that builds all of them
 dist/                           health-content-check.zip, ready to upload
-build.sh                        rebuilds the zip and the PDFs
+build.sh                        rebuilds the zip and every PDF
 ```
 
 `verify_refs.py` is Python standard library only. It sends an identifier to the public CrossRef and PubMed interfaces and nothing else. No page content, no patient data, no keys.
@@ -84,7 +104,7 @@ cd health-content-check
 
 Building the PDFs needs `reportlab` (`pip install reportlab`). Rebuilding the zip needs nothing.
 
-The install guides go stale when Claude or ChatGPT change their menus. The steps live in `guides/build_guides.py`, near the top. Edit, run `./build.sh`, commit.
+The install guides go stale when Claude, ChatGPT or Gemini change their menus. The steps live in `guides/build_guides.py`, near the top. Edit, run `./build.sh`, commit.
 
 ---
 
