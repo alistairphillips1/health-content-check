@@ -1,0 +1,58 @@
+HEALTH CONTENT CHECK
+A free checklist for anyone writing health information for patients or the public.
+
+Version 1.0, 2 September 2026
+
+
+WHAT IS IN THIS FOLDER
+
+  Install-in-Claude.pdf     Follow this if you use Claude. About 5 minutes.
+  Install-in-ChatGPT.pdf    Follow this if you use ChatGPT. About 5 minutes.
+  health-content-check.zip  The checklist itself. Open the PDF first, it tells
+                            you what to do with this file.
+
+Pick the PDF that matches the tool you already use. You do not need both.
+
+
+WHAT IT DOES
+
+It checks a page you have written and tells you what to fix, with the fixes
+written out for you. It also works the other way round, as the checklist to
+write against before you start.
+
+It is built on free, public standards: the NHS digital service manual standard
+for creating health content, and the 10 published PIF TICK criteria.
+
+
+WHAT IT IS NOT
+
+It is not certification. It gives you no badge, tick or logo, and it is not run
+or endorsed by NHS England or by the Patient Information Forum.
+
+Quality marks are awarded by schemes that assess how you produce content over
+time, not by anything that looks at a single page. If you want one, apply to
+the scheme.
+
+What you can honestly say about content that passes this check is that it is
+written to the NHS standard for creating health content.
+
+
+THE PART PEOPLE SKIP
+
+Most of what makes health information trustworthy cannot be checked by
+software: whether a real patient understood it, whether a qualified person
+confirmed it is safe, whether anyone reads the feedback, whether the review
+date is honoured. The checklist will always hand you a short list of things
+only you can confirm, and it will not tick them for you. That list is the
+point of the whole thing, not an omission.
+
+
+FREE TO USE
+
+MIT licensed. Free to use, copy, adapt and redistribute, including commercially,
+provided the copyright notice travels with it. No warranty. You remain
+responsible for whatever you publish, including anything you publish after this
+has looked at it.
+
+Latest version, and somewhere to report a problem, is:
+https://github.com/alistairphillips1/health-content-check

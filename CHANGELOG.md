@@ -18,4 +18,4 @@ First public release.
   centres. ChatGPT Skills availability was limited and in flux at that date, so the
   ChatGPT guide uses a Project as its main route.
 
-Report anything that has drifted: https://github.com/YOURHANDLE/health-content-check/issues
+Report anything that has drifted: https://github.com/alistairphillips1/health-content-check/issues

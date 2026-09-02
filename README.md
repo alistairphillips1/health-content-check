@@ -77,7 +77,7 @@ build.sh                        rebuilds the zip and the PDFs
 ## For developers
 
 ```bash
-git clone https://github.com/YOURHANDLE/health-content-check.git
+git clone https://github.com/alistairphillips1/health-content-check.git
 cd health-content-check
 ./build.sh          # rebuilds dist/*.zip and the two PDFs
 ```
