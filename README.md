@@ -14,10 +14,10 @@ It runs inside Claude or ChatGPT. You do not need to be technical to use it.
 
 | I use | Download this | Then follow |
 |---|---|---|
-| **Claude** | [health-content-check.zip](https://github.com/alistairphillips1/health-content-check/releases/latest/download/health-content-check.zip) | [Install in Claude (PDF)](guides/Install-in-Claude.pdf) |
-| **ChatGPT** | [health-content-check.zip](https://github.com/alistairphillips1/health-content-check/releases/latest/download/health-content-check.zip) | [Install in ChatGPT (PDF)](guides/Install-in-ChatGPT.pdf) |
+| **Claude** | [health-content-check.zip](dist/health-content-check.zip) | [Install in Claude (PDF)](guides/Install-in-Claude.pdf) |
+| **ChatGPT** | [health-content-check.zip](dist/health-content-check.zip) | [Install in ChatGPT (PDF)](guides/Install-in-ChatGPT.pdf) |
 
-The zip downloads straight away. The guides open in your browser, with a download button at the top right of each.
+On this page, click the file, then click the download button on the page that opens.
 
 A note on ChatGPT: OpenAI's Skills feature is limited to some business plans and its availability keeps changing, so the ChatGPT guide uses a Project instead. Projects work on every plan and do the same job here.
 
